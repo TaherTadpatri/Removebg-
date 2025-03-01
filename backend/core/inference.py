@@ -102,9 +102,6 @@ class P3Net:
 
     async  def predict(self,file):
         self.model.eval() 
-        # print('1')
-        # img = img[:,:,:3] if img.ndim>2 else img
-        # print('2')
         image_data = await file.read()
         image = Image.open(io.BytesIO(image_data))  # Correctly opens the image here!
 

@@ -4,10 +4,23 @@ from PIL import Image
 import io
 import numpy as np
 from core.inference import P3Net 
+from fastapi.middleware.cors import CORSMiddleware
+
+
 
 app = FastAPI()
 model = P3Net()  # Instantiate your P3Net model
+origins = [
+    "http://localhost:5173"
+]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"], 
+)
 
 @app.post("/remove_background/")
 async def remove_background(file: UploadFile = File(...)):
@@ -19,18 +32,16 @@ async def remove_background(file: UploadFile = File(...)):
         if not file.content_type.startswith("image/"):
             raise HTTPException(status_code=400, detail="Invalid file type. Only images are allowed.")
 
-        result =  await model.predict(file)  # Use your P3Net model for prediction
+        result =  await model.predict(file)  
         print(type(result))
-        
-        # # Convert the result (numpy array) back to a PIL Image
         result_image = Image.fromarray(result.astype('uint8')) # ensure it is uint8
-        result_image.save('output.png')
+        
         # # Save the processed image to a byte stream
         output_stream = io.BytesIO()
         result_image.save(output_stream, "PNG")
-        output_stream.seek(0)  # Reset the stream position
+        output_stream.seek(0)  
 
-        # # Return the processed image directly as a response
+       
         return Response(content=output_stream.read(), media_type="image/png")
 
     except Exception as e:
