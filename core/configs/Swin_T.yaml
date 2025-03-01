@@ -1,0 +1,9 @@
+REPOSITORY_ROOT_PATH:'D:/p3-net/P3M-Net-main'
+MODEL:
+  TYPE: 'swin'
+  CUT_AND_PASTE:
+    TYPE: 'NONE'
+
+DATA:
+  CUT_AND_PASTE:
+    TYPE: 'NONE'
