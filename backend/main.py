@@ -11,7 +11,8 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 model = P3Net()  # Instantiate your P3Net model
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "*"
 ]
 
 app.add_middleware(
